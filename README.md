@@ -1,6 +1,6 @@
 ### Sergio Peigneux d'Egmont — Data Scientist / AI Engineer
 
-*Construyo primero, prometo después.*
+*Connect the data backwards, invent the future forwards, and stay curious.*
 
 Data Scientist with 3+ years of professional experience in ML, NLP, and data
 engineering, now focused on LLM-based agent systems — making them behave
