@@ -53,13 +53,14 @@ rules/eval layer. That's a real and valuable skill, but a hiring manager scannin
 your profile for 60 seconds sees one thing twice. Prioritized suggestions, in order
 of how much they'd diversify your portfolio relative to effort:
 
-1. **A visible data-analysis project (Pandas/PySpark).** You describe 5 years of
-   Data Science and Pandas/PySpark experience, but nothing in your public repos
-   shows it — both are backend/agent apps. A focused notebook-or-script project
-   (EDA + feature engineering + a baseline model on a real public dataset, with a
-   PySpark version of at least one heavy transform to justify the tool) would be
-   the single highest-leverage addition, since it's the one claimed skill with zero
-   public evidence.
+1. **A visible data-analysis project (Pandas/PySpark/ML).** Your CV shows real
+   PySpark/Azure Databricks/Azure ML experience from IVIRMA Global and SQL/ETL
+   work from SDG Group — but that code is proprietary and can't be public. Right
+   now nothing in your GitHub shows this side of your work at all; both public
+   repos are backend/agent apps. A focused public project (EDA + feature
+   engineering + a baseline forecasting or NLP model on a public dataset, with a
+   PySpark step to justify the tool) would be the highest-leverage addition,
+   since it's real, substantial experience with zero public evidence.
 2. **A minimal production-RAG project.** You're already studying this
    (ingestion → chunking → embeddings → hybrid search → reranking → citations →
    eval) — turning it into a small working repo, even over a narrow document set,
