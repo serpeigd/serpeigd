@@ -1,41 +1,65 @@
 # GitHub profile & portfolio — improvement notes
 
-Based on a direct inspection of both local repos (`TrainFitter`, `Twistify`) and the
-public state of `github.com/serpeigd` (2 public repos, both already pinned, no
-profile README until now). Nothing below is invented — every point ties to something
-observed in the code, git history, or GitHub API response.
+Based on a direct inspection of the local repos (`TrainFitter`, `Twistify`,
+`AuraPulse`) and the public state of `github.com/serpeigd`. Nothing below is
+invented — every point ties to something observed in the code, git history, or
+GitHub API response.
+
+> **Update (2026-08-06 doc-sync pass):** a third public repo, `AuraPulse`, now
+> exists (Hito 0 in progress — classification → aggregation → reporting
+> pipeline, free/local via Ollama) and has been added to the profile README's
+> "Currently working on" and "Featured projects" sections. Several items below
+> that were open at the time this file was first written are now resolved —
+> marked inline rather than deleted, so the history of what was flagged stays
+> visible. The three project repos' own `README.md`s got a full doc-sync pass
+> the same day; see each repo's `docs/DESIGN.md` (AuraPulse), `docs/decisiones.md`
+> (TrainFitter), or `docs/DESIGN.md` (Twistify) for their own change logs.
 
 ## Repos to pin
 
-You only have two public repos, and both are already pinned — nothing to change there.
-That said, it means your entire public portfolio is "LLM agent app with an eval
-harness," twice. Good depth, no breadth. See "New portfolio projects" below for the
-gap this creates.
+Three public project repos now exist (plus this profile repo itself). All
+three are reasonable pin candidates — no scratch/test repo has shown up yet
+to crowd them out. The "same skill twice" gap flagged below is now partially
+closed by AuraPulse, which demonstrates conditional routing / local-LLM
+classification rather than repeating TrainFitter's or Twistify's shape.
 
 ## Quality improvements — TrainFitter
 
 | Item | Status | Recommendation |
 |---|---|---|
-| README | ✅ Strong — problem framing, usage, structure, honest "what's not done yet" section | No change needed |
-| Tests | ✅ 6 test files (`tests/test_*.py`), real coverage of routine/diet/validator/orchestrator | No change needed |
+| README | ✅ Strong — grown substantially since this note was written (live demo, Gmail/Notion, client portal, inbox automation all now documented) | No change needed |
+| Tests | ✅ 245 tests passing (`tests/test_*.py`), covers rule engines, validator, orchestrator, connectors (mocked network), PDF round-trips | No change needed |
 | CI | ✅ `ci.yml`, badge in README | No change needed |
-| `.env.example` | ✅ Present, documents `ANTHROPIC_API_KEY` | No change needed |
+| `.env.example` | ✅ Present and complete against every env var actually read in code | No change needed |
 | `.gitignore` | ✅ `.venv` and secrets properly excluded (verified: 0 tracked files under `.venv`) | No change needed |
-| **LICENSE** | ❌ Missing | Add one (see checklist) |
-| **Docker** | ❌ No Dockerfile | Add one — see rationale below |
+| **LICENSE** | ✅ Resolved — MIT license added, badge in README | — |
+| **Docker** | ❌ Still no Dockerfile | Add one — see rationale below (still open) |
 
 ## Quality improvements — Twistify
 
 | Item | Status | Recommendation |
 |---|---|---|
-| README | ✅ Strong — clear differentiation ("not another movie CRUD"), screenshots, honest status table | No change needed |
-| Tests | ✅ `tests/test_metrics.py`, CI green | No change needed |
-| CI | ✅ `tests.yml`, badge in README | No change needed |
+| README | ✅ Strong — clear differentiation ("not another movie CRUD"), screenshots, honest status table, now also documents the live deploy and full judge-calibration results | No change needed |
+| Tests | ✅ `tests/test_metrics.py` (8 tests), CI green | No change needed |
+| CI | ✅ `tests.yml`, badge in README, plus a release badge (`v1.0.0`) | No change needed |
 | `.gitignore` | ✅ Correct — verified no `__pycache__`/`.pytest_cache` tracked | No change needed |
-| **`.env.example`** | ❌ Missing (README references `ANTHROPIC_API_KEY` usage indirectly but gives no template) | Add one |
-| **LICENSE** | ❌ Missing (README says "no license defined yet — ask first") | Add one, even a restrictive one — an explicit license reads as more finished than a note asking people to ask |
-| **Unpushed commits** | ⚠️ 4 local commits ahead of `origin/main` (English translation of UI/docs) | Push them — right now the public repo is still in Spanish while your target roles are English-speaking |
-| **Docker** | ❌ No Dockerfile, despite being a FastAPI app — the easiest of your two repos to containerize | Add one — see rationale below |
+| **`.env.example`** | ❌ Still missing — README's Configuration table documents every env var in prose, but there's no copy-pasteable template | Add one (still open) |
+| **LICENSE** | ❌ Still missing (README says "no license defined yet — ask first") | Add one, even a restrictive one — an explicit license reads as more finished than a note asking people to ask (still open) |
+| **Unpushed commits** | ✅ Resolved — `main` is fully in English, repo is current | — |
+| **Docker** | ❌ Still no Dockerfile, despite being a FastAPI app with no database — the easiest repo of the three to containerize | Add one — see rationale below (still open) |
+
+## Quality improvements — AuraPulse
+
+| Item | Status | Recommendation |
+|---|---|---|
+| README | ✅ Strong — features, architecture diagram, tech stack, honest limitations section with real eval numbers | No change needed |
+| Tests | ✅ 63 passing (`pytest -q`) | No change needed |
+| CI | ✅ `ci.yml` runs pytest + ruff + mypy, badge in README | No change needed |
+| `ruff` / `mypy` | ✅ Both clean (`All checks passed!` / `no issues found in 19 source files`) | No change needed |
+| `.env.example` | ✅ Present (documents `OLLAMA_HOST`/`OLLAMA_MODEL`, both optional) | No change needed |
+| **LICENSE** | ✅ Present (MIT) | — |
+| **Docker** | ❌ No Dockerfile — lower priority here than for Twistify/TrainFitter since the project depends on a local Ollama server anyway, so a container wouldn't be self-contained without also bundling/documenting Ollama | Optional — a `docker-compose.yml` pairing an app container with an `ollama/ollama` service would be the honest way to do this, not a plain Dockerfile |
+| **End-to-end classification script** | ❌ No script classifies the full review subset and writes `data/processed/classified_reviews.jsonl` yet — `generate_report.py` is only demonstrable via `--demo` today | Add one to close out Hito 0 (flagged by the repo's own doc-sync pass, not by this file originally) |
 
 ## Why Docker matters here specifically
 
@@ -48,10 +72,13 @@ your resume claims and what a recruiter can click through and verify.
 
 ## New portfolio projects worth building
 
-Your two existing repos both show the same skill: building an LLM-agent app with a
-rules/eval layer. That's a real and valuable skill, but a hiring manager scanning
-your profile for 60 seconds sees one thing twice. Prioritized suggestions, in order
-of how much they'd diversify your portfolio relative to effort:
+Your three existing repos all show a closely related skill: building an
+LLM-agent app with a rules/eval layer (AuraPulse adds a genuinely different
+angle — local-model classification and conditional routing — but it's still
+"agent app," not the classic ML/data side of your CV). A hiring manager
+scanning your profile for 60 seconds still sees one shape three times.
+Prioritized suggestions, in order of how much they'd diversify your
+portfolio relative to effort:
 
 1. **A visible data-analysis project (Pandas/PySpark/ML).** Your CV shows real
    PySpark/Azure Databricks/Azure ML experience from IVIRMA Global and SQL/ETL
@@ -83,36 +110,46 @@ of how much they'd diversify your portfolio relative to effort:
 
 ## General quality checklist
 
-- [ ] Add a `LICENSE` to both `TrainFitter` and `Twistify` (MIT is the standard
-      default for portfolio code; keep "ask first" wording only if you genuinely
-      want to restrict reuse — but an explicit restrictive license still reads
-      better than no license at all).
-- [ ] Push Twistify's 4 pending commits (English translation) so the public repo
-      matches what recruiters will actually read.
-- [ ] Add `.env.example` to Twistify (TrainFitter already has one — good
-      pattern, just replicate it).
-- [ ] Add a `Dockerfile` to at least Twistify (simplest target), ideally both.
-- [ ] Create the `serpeigd/serpeigd` special repo on GitHub and push this
-      folder's `README.md` to it — that's the only way GitHub renders a README
-      on the profile page itself (`github.com/serpeigd`) instead of just inside a
-      normal repo.
+- [x] Add a `LICENSE` to `TrainFitter` — done (MIT).
+- [ ] Add a `LICENSE` to `Twistify` (MIT is the standard default for
+      portfolio code; keep "ask first" wording only if you genuinely want to
+      restrict reuse — but an explicit restrictive license still reads better
+      than no license at all). **Still open.**
+- [x] Push Twistify's pending commits (English translation) — done, `main`
+      is fully in English.
+- [ ] Add `.env.example` to Twistify (TrainFitter and AuraPulse both already
+      have one — good pattern, just replicate it). **Still open.**
+- [ ] Add a `Dockerfile` to at least Twistify (simplest target — FastAPI, no
+      database), ideally TrainFitter too. AuraPulse is a special case (see
+      its own table above — `docker-compose.yml` pairing with an Ollama
+      service, not a plain Dockerfile). **Still open.**
+- [x] Create the `serpeigd/serpeigd` special repo on GitHub and push this
+      folder's `README.md` to it — done, this repo exists and the README is
+      kept in sync here.
 - [ ] Build the Pandas/PySpark data project (see above) — closes the biggest
       credibility gap between your stated background and your visible repos.
-- [ ] Once you have 3+ solid repos, revisit the pinned selection — right now
-      pinning both existing repos is correct by default (you only have two), but
-      don't let a future repo like a scratch/test one crowd them out.
+      **Still open**, still the single highest-leverage addition.
+- [x] AuraPulse became the third solid repo — revisit pinning if a fourth,
+      unrelated-shape project shows up; for now all three project repos are
+      correctly pinned.
+- [ ] Close out AuraPulse's Hito 0 by adding the end-to-end classification
+      script that writes `data/processed/classified_reviews.jsonl` (see its
+      own table above) — the one piece stopping `generate_report.py` from
+      being demonstrable against real data, not just `--demo`.
 
 ## Priority x effort
 
-| Priority | Effort | Item |
-|---|---|---|
-| High | Low | Push Twistify's 4 pending commits |
-| High | Low | Publish this README to `serpeigd/serpeigd` |
-| High | Low | Add LICENSE to both repos |
-| High | Medium | Add `Dockerfile` to Twistify |
-| High | Medium | Add `.env.example` to Twistify |
-| High | High | Build the Pandas/PySpark data-analysis project |
-| Medium | Medium | Add Dockerfile to TrainFitter |
-| Medium | High | Build the production-RAG project |
-| Low | Medium | Extract Twistify's evals harness into a standalone tool |
-| Low | High | Agent-security demo project |
+| Priority | Effort | Item | Status |
+|---|---|---|---|
+| High | Low | Push Twistify's pending commits | ✅ Done |
+| High | Low | Publish this README to `serpeigd/serpeigd` | ✅ Done |
+| High | Low | Add LICENSE to TrainFitter | ✅ Done |
+| High | Low | Add LICENSE to Twistify | Still open |
+| High | Medium | Add `Dockerfile` to Twistify | Still open |
+| High | Medium | Add `.env.example` to Twistify | Still open |
+| High | Low | Close out AuraPulse Hito 0 (full-dataset classification script) | Still open |
+| High | High | Build the Pandas/PySpark data-analysis project | Still open |
+| Medium | Medium | Add Dockerfile (or `docker-compose.yml`) to TrainFitter / AuraPulse | Still open |
+| Medium | High | Build the production-RAG project | Still open |
+| Low | Medium | Extract Twistify's evals harness into a standalone tool | Still open |
+| Low | High | Agent-security demo project | Still open |
