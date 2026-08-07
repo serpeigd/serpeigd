@@ -15,6 +15,33 @@ GitHub API response.
 > the same day; see each repo's `docs/DESIGN.md` (AuraPulse), `docs/decisiones.md`
 > (TrainFitter), or `docs/DESIGN.md` (Twistify) for their own change logs.
 
+> **Update (2026-08-07 doc-sync pass):** two corrections and one process
+> finding from today's run:
+> 1. The line above calling AuraPulse "Hito 0 in progress" was already stale
+>    — Hito 0 finished and Hito 1's first slice (LLM-free routing, draft-reply
+>    generation, deterministic escalation flagging) has since shipped on
+>    `main`. Fixed in the profile README's AuraPulse status line; leaving this
+>    note rather than rewriting the line above, per this file's own
+>    append-don't-rewrite convention.
+> 2. Each project repo got a second documentation-sync pass today (badges,
+>    screenshots, Configuration/Limitations/FAQ sections, staleness fixes) —
+>    see AuraPulse [#11](https://github.com/serpeigd/AuraPulse/pull/11),
+>    TrainFitter [#2](https://github.com/serpeigd/TrainFitter/pull/2), and
+>    Twistify [#8](https://github.com/serpeigd/Twistify/pull/8) (all draft
+>    PRs, not yet merged).
+> 3. **Process gap, flagged for manual attention, not fixed here:** this
+>    scheduled task runs on a fresh branch name each time
+>    (`claude/<slug>-<random>`), so an unmerged draft PR from one run is
+>    never reused by the next — it just opens another one from scratch.
+>    Every one of the four repos now has **two** open draft "sync docs" PRs
+>    covering near-identical ground (yesterday's `*-sy7lxb` branches and
+>    today's `*-vwudox` branches: AuraPulse #10 & #11, TrainFitter #1 & #2,
+>    Twistify #7 & #8, and this repo's own #1 plus whatever branch today's
+>    push lands on). None of this session's agents were told about the
+>    older PRs going in, so they didn't dedupe against them. Recommend
+>    reviewing and merging one PR per repo, closing its sibling, before the
+>    next scheduled run adds a third.
+
 ## Repos to pin
 
 Three public project repos now exist (plus this profile repo itself). All

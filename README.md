@@ -122,9 +122,11 @@ for dataset handling, pytest/ruff/mypy in CI.
 deterministic fake-review generator validates the pipeline first, and the
 free Yelp star rating backs sentiment evals before a single review gets
 hand-labeled for aspect extraction.
-*Status:* Hito 0 (classification → aggregation → reporting) implemented
-and evaluated end-to-end; response-draft generation and escalation routing
-are explicitly out of scope until it closes.
+*Status:* Hito 0 (classification → aggregation → reporting) done and
+evaluated end-to-end; Hito 1's first slice has since shipped too —
+LLM-free routing, draft-reply generation, and deterministic escalation
+flagging, still with no orchestration framework until the `if/elif`
+routing genuinely stops being legible.
 
 ---
 
