@@ -29,6 +29,7 @@ measure a claim instead of assuming it.
 ![Pydantic](https://img.shields.io/badge/Pydantic-E92063?logo=pydantic&logoColor=white)
 ![pytest](https://img.shields.io/badge/pytest-0A9EDC?logo=pytest&logoColor=white)
 ![Anthropic](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-000000?logo=ollama&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
 
 **Tooling**
@@ -39,9 +40,15 @@ measure a claim instead of assuming it.
 
 #### Currently working on
 
-- **[TrainFitter](https://github.com/serpeigd/TrainFitter)** and
-  **[Twistify](https://github.com/serpeigd/Twistify)** — both in active
-  development, moving phase by phase rather than shipped-and-done.
+- **[TrainFitter](https://github.com/serpeigd/TrainFitter)**,
+  **[Twistify](https://github.com/serpeigd/Twistify)**, and
+  **[AuraPulse](https://github.com/serpeigd/AuraPulse)** — three portfolio
+  projects moving phase by phase rather than shipped-and-done, each covering
+  a deliberately different slice of the agent-engineering roadmap: a
+  multi-agent pipeline with a human-approval gate (TrainFitter), a
+  measured-not-promised safety guarantee with a calibrated eval harness
+  (Twistify), and conditional routing / when a graph orchestrator earns its
+  complexity over a plain sequential pipeline (AuraPulse).
 - Deepening a specific set of AI-engineering topics, in this order of
   priority right now:
   - **Agent architecture** — typed tool contracts, explicit state, bounded
@@ -66,30 +73,60 @@ measure a claim instead of assuming it.
 **[TrainFitter](https://github.com/serpeigd/TrainFitter)**
 A multi-agent system that drafts workout and nutrition plans for a personal
 trainer's clients, following the trainer's own documented method instead of
-generic advice.
+generic advice — now with a live demo, Gmail/Notion integrations, and a
+client-facing portal, not just a pipeline.
 *Problem it solves:* the bottleneck in online coaching isn't coaching — it's
-the hours spent writing a routine and a diet from scratch per client.
-*Stack:* Python, a deterministic rules engine as the free default path, an
-optional Anthropic Claude layer, explicit-state orchestration across
-routine/diet/validator agents, a Streamlit review panel, pytest, CI on
-GitHub Actions.
-*Notable design choice:* nothing is ever sent to the client automatically —
-every output is a draft, and clinical or injury cases are auto-flagged for
-human review.
+the hours spent writing a routine and a diet from scratch per client, then
+tracking whether the client actually follows it.
+*Stack:* Python 3.12, a deterministic rules engine as the free default path
+(with an optional Anthropic Claude layer behind the same schema),
+explicit-state orchestration across routine/diet/validator agents, a
+Streamlit review panel and client portal, Gmail/Notion connectors, a
+GitHub Actions cron trigger, pytest, CI.
+*Notable design choice:* nothing is ever sent to a client automatically
+(one narrow, disclosed exception for the portal's own magic link) — every
+plan is a draft, and clinical or injury cases are auto-flagged for human
+review by a validator that's deliberately never the LLM path.
+*Try it:* [trainfitter.streamlit.app](https://trainfitter.streamlit.app/) — no install, no login, no API key.
 
 **[Twistify](https://github.com/serpeigd/Twistify)**
 A spoiler-free movie catalogue where the spoiler partition is enforced
 server-side, paired with an evaluation harness that measures whether that
-promise actually holds.
+promise actually holds — including the uncomfortable case where the cheap
+judge fails.
 *Problem it solves:* "spoiler-safe" is usually a UI trick (CSS hiding a
 div); here, post-viewing content simply isn't sent to the client until it
 declares `seen=true`.
 *Stack:* Python 3.12, FastAPI, Pydantic v2, vanilla HTML/CSS/JS on the
-frontend, a Claude-based baseline generator, a custom evals harness
-(leakage rate, grounded-fact rate, richness) calibrated against planted
-spoilers, pytest, CI on GitHub Actions.
+frontend, two interchangeable baseline generators (Anthropic paid / Groq
+free tier), a custom evals harness (leakage rate, grounded-fact rate,
+richness) calibrated against a 7,657-review external human dataset, pytest,
+CI.
 *Notable design choice:* the harness reports its own judge's weaknesses
-(including a measured `recall = 0.0` case) instead of hiding them.
+(a measured `recall = 0.089` on the best judge so far) instead of hiding
+them, and blocks the next milestone (retrieval) until the judge clears a
+trust bar.
+*Try it:* [twistify.onrender.com](https://twistify.onrender.com) — 8/20 titles fully researched with cited sources, the rest browsable via TMDB.
+
+**[AuraPulse](https://github.com/serpeigd/AuraPulse)**
+An agent that reads a restaurant's public reviews and detects recurring
+operational inconsistencies (food praised while wait time is consistently
+criticized, for example) instead of just reporting aggregate sentiment.
+*Problem it solves:* sentiment dashboards tell a business "you're at 4
+stars"; this turns the same reviews into a specific, actionable signal
+about *what* is quietly degrading.
+*Stack:* Python 3.11+, Pydantic v2 schema-first classification, a local
+LLM served by Ollama (zero paid API calls anywhere in the project), pandas
+for dataset handling, pytest/ruff/mypy in CI.
+*Notable design choice:* ground truth is never LLM-generated — a
+deterministic fake-review generator validates the pipeline first, and the
+free Yelp star rating backs sentiment evals before a single review gets
+hand-labeled for aspect extraction.
+*Status:* Hito 0 (classification → aggregation → reporting) done and
+evaluated end-to-end; Hito 1's first slice has since shipped too —
+LLM-free routing, draft-reply generation, and deterministic escalation
+flagging, still with no orchestration framework until the `if/elif`
+routing genuinely stops being legible.
 
 ---
 
@@ -110,7 +147,7 @@ experience:
   workflows for privacy-sensitive data.
 
 Comfortable across the full loop of a data problem — from analysis and
-modeling to shipping a result as a service — with the AI-agent work below
+modeling to shipping a result as a service — with the AI-agent work above
 as the current, self-directed focus.
 
 ---
