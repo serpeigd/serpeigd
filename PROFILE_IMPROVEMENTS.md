@@ -42,6 +42,47 @@ GitHub API response.
 >    reviewing and merging one PR per repo, closing its sibling, before the
 >    next scheduled run adds a third.
 
+> **Update (2026-08-09 doc-sync pass):** all four repos' CLAUDE.md files were
+> updated (2026-08-07, in a prior session) with a standing dedupe/self-merge
+> rule for exactly the gap flagged above — before opening a new "docs: sync"
+> PR, check for an existing open one and fold/merge/close rather than
+> stacking a third. Confirmed working this run: every repo had **zero** open
+> PRs before this pass started (AuraPulse's #12/#13/#14-worth of PRs,
+> TrainFitter's #1-#3, Twistify's #1-#9, this repo's #1-#3 are all
+> merged/closed) — the duplication problem from 2026-08-07 is resolved, not
+> just documented. This pass reset each project repo's designated branch
+> from its base first (per the same CLAUDE.md convention, since each
+> branch's prior content had already been merged), then ran a focused,
+> docs-only review per repo:
+> - **AuraPulse** [#14](https://github.com/serpeigd/AuraPulse/pull/14)
+>   (merged): found and fixed a real doc/code mismatch — `.env` isn't
+>   actually auto-loaded (`python-dotenv` is a listed dependency that's
+>   never imported/called anywhere; config is read via plain
+>   `os.environ.get(...)`). README and `.env.example` wrongly implied
+>   copying `.env.example` → `.env` was sufficient. See the new row added to
+>   this file's AuraPulse table below.
+> - **TrainFitter** [#4](https://github.com/serpeigd/TrainFitter/pull/4)
+>   (merged): `docs/arquitectura.md` and `docs/highlights.md` had drifted
+>   behind the most recent feature commit (client roster + trend charts,
+>   `ad22bc8`) — fixed, and `docs/highlights.md` gained entry #12. Flagged
+>   for manual attention: `CLAUDE.md` itself still says highlights.md is
+>   "11 decisions, 1 page" — now stale at 12, left untouched since
+>   `CLAUDE.md` was out of this run's docs-only scope.
+> - **Twistify** [#10](https://github.com/serpeigd/Twistify/pull/10)
+>   (merged): `docs/DESIGN.md` D14 still described best-of-3 draft
+>   generation as "not implemented" two commits after it actually shipped
+>   and was confirmed working live — fixed. Also fixed a stale count (7→8
+>   researched titles) and a wrong tech-stack claim (README credited
+>   Anthropic Claude for research-assist drafting; the code only ever calls
+>   Groq). Flagged, not fixed (out of file-scope): the `v1.0.0` GitHub
+>   Release notes are stale, and `evals/results/substring_calibration.json`
+>   has a leftover Spanish `"nota"` field from before the English-only pass.
+>
+> This file's profile-README edits (TrainFitter/Twistify/AuraPulse featured
+> blurbs) are additive — see the "recent improvement" lines added to each
+> project's card — not a rewrite of the existing status prose, which was
+> re-verified accurate.
+
 ## Repos to pin
 
 Three public project repos now exist (plus this profile repo itself). All
@@ -87,6 +128,7 @@ classification rather than repeating TrainFitter's or Twistify's shape.
 | **LICENSE** | ✅ Present (MIT) | — |
 | **Docker** | ❌ No Dockerfile — lower priority here than for Twistify/TrainFitter since the project depends on a local Ollama server anyway, so a container wouldn't be self-contained without also bundling/documenting Ollama | Optional — a `docker-compose.yml` pairing an app container with an `ollama/ollama` service would be the honest way to do this, not a plain Dockerfile |
 | **End-to-end classification script** | ❌ No script classifies the full review subset and writes `data/processed/classified_reviews.jsonl` yet — `generate_report.py` is only demonstrable via `--demo` today | Add one to close out Hito 0 (flagged by the repo's own doc-sync pass, not by this file originally) |
+| **`.env` auto-loading** | ❌ `python-dotenv` is a listed dependency but never imported/called anywhere — a `.env` file does nothing by itself, config must be real exported shell env vars. Docs now say this accurately (flagged 2026-08-09) | Either wire in `load_dotenv()` at the scripts' entry points, or drop the dependency if `.env` support isn't actually wanted — small code fix, **still open** |
 
 ## Why Docker matters here specifically
 

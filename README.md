@@ -73,8 +73,9 @@ measure a claim instead of assuming it.
 **[TrainFitter](https://github.com/serpeigd/TrainFitter)**
 A multi-agent system that drafts workout and nutrition plans for a personal
 trainer's clients, following the trainer's own documented method instead of
-generic advice — now with a live demo, Gmail/Notion integrations, and a
-client-facing portal, not just a pipeline.
+generic advice — now with a live demo, Gmail/Notion integrations, a
+client-facing portal, and a trainer-facing client roster, not just a
+pipeline.
 *Problem it solves:* the bottleneck in online coaching isn't coaching — it's
 the hours spent writing a routine and a diet from scratch per client, then
 tracking whether the client actually follows it.
@@ -87,6 +88,9 @@ GitHub Actions cron trigger, pytest, CI.
 (one narrow, disclosed exception for the portal's own magic link) — every
 plan is a draft, and clinical or injury cases are auto-flagged for human
 review by a validator that's deliberately never the LLM path.
+*Recent improvement:* a client roster with per-client weight/adherence trend
+charts, surfaced by a real production crash (a missing chart-library
+dependency) that live-testing caught and the test suite hadn't.
 *Try it:* [trainfitter.streamlit.app](https://trainfitter.streamlit.app/) — no install, no login, no API key.
 
 **[Twistify](https://github.com/serpeigd/Twistify)**
@@ -106,6 +110,10 @@ CI.
 (a measured `recall = 0.089` on the best judge so far) instead of hiding
 them, and blocks the next milestone (retrieval) until the judge clears a
 trust bar.
+*Recent improvement:* a research-assist tool that drafts new catalogue
+entries from real Wikipedia/TMDB retrieval (never LLM memory), with a
+code-level safety net that strips any fabricated citation — confirmed
+working end-to-end live, best-of-3 candidate generation included.
 *Try it:* [twistify.onrender.com](https://twistify.onrender.com) — 8/20 titles fully researched with cited sources, the rest browsable via TMDB.
 
 **[AuraPulse](https://github.com/serpeigd/AuraPulse)**
@@ -127,6 +135,10 @@ evaluated end-to-end; Hito 1's first slice has since shipped too —
 LLM-free routing, draft-reply generation, and deterministic escalation
 flagging, still with no orchestration framework until the `if/elif`
 routing genuinely stops being legible.
+*Recent improvement:* the escalation trigger (`severity_flag`) went from
+25% specificity to a measured 100%/100% recall-and-specificity, via a
+properly balanced ground-truth set instead of a token 1-positive-case
+sample.
 
 ---
 
