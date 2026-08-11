@@ -83,13 +83,51 @@ GitHub API response.
 > project's card — not a rewrite of the existing status prose, which was
 > re-verified accurate.
 
+> **Update (2026-08-11 doc-sync pass):** a fourth public repo, `TrackerAID`,
+> has appeared since the last pass (F0 done, F1 — field-coverage
+> measurement, gold-set labeling, BM25 baseline + IR eval harness — in
+> progress) and has been added to the profile README's "Currently working
+> on" and "Featured projects" sections, plus its own quality table below.
+> This is a genuinely different shape from the other three: it's the first
+> project with a real IR-retrieval-eval discipline (precision/recall/nDCG/MRR
+> against a hand-labeled gold set) and the first to use real orchestration
+> tooling (n8n) outside pure Python — it substantially starts closing the
+> "production-RAG project" and "toolset diversification" gaps flagged in
+> this file's "New portfolio projects worth building" section below (see the
+> inline note added there). It does not yet close the still-fully-open
+> "visible Pandas/PySpark data-analysis project" gap — TrackerAID's stack is
+> retrieval/IR, not the classic ML/ETL side of the CV.
+>
+> This run also found and fixed one real doc/code mismatch in each of the
+> other three repos (small, targeted — most of each README was already
+> accurate): AuraPulse's "Tests and checks" section was missing `app/` from
+> its `ruff`/`mypy` commands even though CI already lints/type-checks that
+> directory (merged, [#21](https://github.com/serpeigd/AuraPulse/pull/21));
+> TrainFitter's "never sends automatically" section undercounted its own
+> `gmail.send` exceptions (two documented, three in code) and split out the
+> `motor="llm"` optional-install step (PR
+> [#5](https://github.com/serpeigd/TrainFitter/pull/5), pending CI at the
+> time of this pass); Twistify's README picked up the mobile off-canvas
+> drawer, the `/api/search` browse tier, and a couple of stale install notes
+> (merged, [#11](https://github.com/serpeigd/Twistify/pull/11)).
+>
+> **Process note:** this run's four project-repo sync agents each hit the
+> session's API usage limit mid-task (a capacity issue, not a task failure)
+> and had to be resumed manually rather than autonomously; TrainFitter's and
+> TrackerAID's README edits were already fully drafted by the time their
+> agent was interrupted; and were committed/pushed/PR'd to completion
+> instead of redone from scratch — no lost work, just a slower path than
+> usual.
+
 ## Repos to pin
 
-Three public project repos now exist (plus this profile repo itself). All
-three are reasonable pin candidates — no scratch/test repo has shown up yet
-to crowd them out. The "same skill twice" gap flagged below is now partially
-closed by AuraPulse, which demonstrates conditional routing / local-LLM
-classification rather than repeating TrainFitter's or Twistify's shape.
+Four public project repos now exist (plus this profile repo itself). All
+four are reasonable pin candidates — no scratch/test repo has shown up yet
+to crowd them out. The "same skill twice" gap flagged below is now further
+closed by TrackerAID (retrieval/IR-eval + real orchestration tooling) on
+top of AuraPulse's earlier conditional-routing/local-LLM angle — a
+recruiter scanning the pinned repos now sees four distinct shapes, not one
+repeated three or four times.
 
 ## Quality improvements — TrainFitter
 
@@ -130,6 +168,19 @@ classification rather than repeating TrainFitter's or Twistify's shape.
 | **End-to-end classification script** | ❌ No script classifies the full review subset and writes `data/processed/classified_reviews.jsonl` yet — `generate_report.py` is only demonstrable via `--demo` today | Add one to close out Hito 0 (flagged by the repo's own doc-sync pass, not by this file originally) |
 | **`.env` auto-loading** | ❌ `python-dotenv` is a listed dependency but never imported/called anywhere — a `.env` file does nothing by itself, config must be real exported shell env vars. Docs now say this accurately (flagged 2026-08-09) | Either wire in `load_dotenv()` at the scripts' entry points, or drop the dependency if `.env` support isn't actually wanted — small code fix, **still open** |
 
+## Quality improvements — TrackerAID
+
+| Item | Status | Recommendation |
+|---|---|---|
+| README | ✅ Substantially expanded this pass — repo structure, F1 script usage, a `.env.example`-cross-checked config table, and a limitations section, on top of the architecture/roadmap/privacy sections that already existed | No change needed |
+| Tests | ✅ Unit tests for the BDNS client (mocked via `respx`), the BM25 retriever, and IR metrics (`tests/test_*.py`), plus an `integration` marker for a real-API smoke test excluded from default CI | No change needed |
+| CI | ✅ `ci.yml` runs `ruff check` + `pytest --cov`, badge in README, green on `main` | No change needed |
+| `mypy` | ❌ Not configured (unlike TrainFitter/AuraPulse) — no type-checking step in CI | Optional — add once the codebase is past early-F1 churn; low priority while `extraction/` is still a placeholder |
+| `.env.example` | ✅ Present, and now fully cross-referenced against what `config.py` actually reads vs. what's a future-phase placeholder | No change needed |
+| **LICENSE** | ✅ Present (MIT) from the start — ahead of Twistify here | — |
+| **Docker** | ❌ No Dockerfile — reasonable at this stage (F1, no deployed service yet; Postgres/Supabase and n8n are still unused placeholders per `.env.example`) | Revisit once F3 (n8n + FastAPI in production) actually ships — premature before then |
+| **Gold-set labeling** | ❌ 450 candidates generated with heuristic relevance, 0 hand-reviewed — the eval harness runs but the real ablation table it exists to produce isn't published yet | This is F1's own next step per the repo's roadmap, not a documentation gap — flagged here only for visibility |
+
 ## Why Docker matters here specifically
 
 You listed Docker and deployment as target skills, but neither public repo
@@ -162,6 +213,12 @@ portfolio relative to effort:
    eval) — turning it into a small working repo, even over a narrow document set,
    converts "learning" into "shipped," and is a natural extension of the evals
    discipline you already show in Twistify.
+   > **2026-08-11 note:** TrackerAID (see "Repos to pin" above) has since started
+   > covering this ground from the retrieval/eval side — BM25 baseline, IR
+   > metrics against a gold set, hybrid/reranker stages still on its own
+   > roadmap (F1→). It's ingestion+ranking over structured grant records, not
+   > embeddings-over-documents RAG, so this item isn't fully closed — but the
+   > gap is narrower than when this list was first written.
 3. **Containerized deployment reference.** Could be as simple as taking TrainFitter
    or Twistify and adding Docker + a one-command deploy (Fly.io/Railway/Render free
    tier), documented in a short `docs/deployment.md`. Directly demonstrates the
@@ -200,11 +257,16 @@ portfolio relative to effort:
       **Still open**, still the single highest-leverage addition.
 - [x] AuraPulse became the third solid repo — revisit pinning if a fourth,
       unrelated-shape project shows up; for now all three project repos are
-      correctly pinned.
+      correctly pinned. **2026-08-11: the fourth showed up** — see next item.
 - [ ] Close out AuraPulse's Hito 0 by adding the end-to-end classification
       script that writes `data/processed/classified_reviews.jsonl` (see its
       own table above) — the one piece stopping `generate_report.py` from
       being demonstrable against real data, not just `--demo`.
+- [x] TrackerAID appeared as a fourth project repo (2026-08-11) —
+      added to the profile README's "Currently working on" and "Featured
+      projects" sections and given its own quality table above; all four
+      project repos are now correctly pin-candidate quality (CI, tests,
+      LICENSE, `.env.example` all present on each).
 
 ## Priority x effort
 
@@ -222,3 +284,4 @@ portfolio relative to effort:
 | Medium | High | Build the production-RAG project | Still open |
 | Low | Medium | Extract Twistify's evals harness into a standalone tool | Still open |
 | Low | High | Agent-security demo project | Still open |
+| Low | Medium | Hand-review TrackerAID's 450 gold-set candidates (`relevance` column) to unlock the real ablation table | Still open — tracked as F1 on TrackerAID's own roadmap, not a documentation gap |

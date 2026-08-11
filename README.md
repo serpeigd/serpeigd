@@ -41,14 +41,18 @@ measure a claim instead of assuming it.
 #### Currently working on
 
 - **[TrainFitter](https://github.com/serpeigd/TrainFitter)**,
-  **[Twistify](https://github.com/serpeigd/Twistify)**, and
-  **[AuraPulse](https://github.com/serpeigd/AuraPulse)** — three portfolio
+  **[Twistify](https://github.com/serpeigd/Twistify)**,
+  **[AuraPulse](https://github.com/serpeigd/AuraPulse)**, and
+  **[TrackerAID](https://github.com/serpeigd/TrackerAID)** — four portfolio
   projects moving phase by phase rather than shipped-and-done, each covering
   a deliberately different slice of the agent-engineering roadmap: a
   multi-agent pipeline with a human-approval gate (TrainFitter), a
   measured-not-promised safety guarantee with a calibrated eval harness
-  (Twistify), and conditional routing / when a graph orchestrator earns its
-  complexity over a plain sequential pipeline (AuraPulse).
+  (Twistify), conditional routing / when a graph orchestrator earns its
+  complexity over a plain sequential pipeline (AuraPulse), and a retrieval
+  system with a proper IR-eval discipline plus real orchestration tooling
+  (n8n, Lovable) — the data-engineering/production-retrieval slice the other
+  three don't cover (TrackerAID).
 - Deepening a specific set of AI-engineering topics, in this order of
   priority right now:
   - **Agent architecture** — typed tool contracts, explicit state, bounded
@@ -139,6 +143,31 @@ routing genuinely stops being legible.
 25% specificity to a measured 100%/100% recall-and-specificity, via a
 properly balanced ground-truth set instead of a token 1-positive-case
 sample.
+
+**[TrackerAID](https://github.com/serpeigd/TrackerAID)**
+A weekly semantic radar for Spanish public-grant announcements (BDNS, the
+national subsidy registry), ranked by fit for each user's business profile
+— the newest of the four projects, and the first built with a
+retrieval/IR-evaluation discipline from day one rather than bolted on
+afterward.
+*Problem it solves:* relevant grants for freelancers and small businesses
+get published constantly but sit buried in a generic government feed;
+nobody has time to check by hand every week.
+*Stack:* Python, FastAPI, a BM25 retrieval baseline with a proper IR eval
+harness (precision/recall/nDCG/MRR) against a hand-labeled gold set,
+Postgres/pgvector on Supabase (from F1 on), n8n for weekly orchestration,
+Resend for email — the same "logic lives in tested Python, orchestration
+tools never hold business logic" discipline as the rest of the portfolio
+(see [ADR-0003](https://github.com/serpeigd/TrackerAID/blob/main/docs/adr/0003-logica-en-python-no-en-n8n.md)).
+*Notable design choice:* the retrieval-quality claim is held to the same
+bar AuraPulse holds its sentiment/aspect claims to — never asserted without
+a labeled denominator; the eval script explicitly flags when it's still
+running on provisional heuristic labels instead of a human-reviewed gold
+set.
+*Status:* F0 (verified BDNS-only data source, see ADR-0002) done; F1 (field
+coverage measured, gold-labeling criteria written, BM25 baseline + eval
+harness running) in progress — 450 gold candidates generated, 0 yet
+hand-reviewed.
 
 ---
 
