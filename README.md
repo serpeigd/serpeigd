@@ -211,18 +211,6 @@ rather than left for a reader to discover.
 best baseline (a 44% cut), 11/11 golden-set scenarios passing, 100% budget
 compliance, zero hard-constraint violations.
 
-**[WayWin](https://github.com/serpeigd/WayWin)**
-A points-betting app (no real money) for a fixed group of friends on a
-trip — the deliberately un-serious one, shipped and actually used.
-*Why it's here anyway:* the interesting part is concurrency. Everything
-that moves a balance runs as a Postgres function called over RPC, not as a
-read-modify-write from the client, because several phones bidding against
-the same balance at once is a real race window rather than a theoretical
-one. Payouts use a pool-style multiplier computed at resolution time.
-*Stack:* a single no-build HTML file (React via CDN), Supabase
-(Postgres + Realtime + Storage) with row-level security, installable as a
-PWA with an offline shell, deployed on Render.
-
 ---
 
 #### Background
