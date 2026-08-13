@@ -290,13 +290,14 @@ portfolio relative to effort:
 
 ## Update (2026-08-13 doc-sync pass)
 
-Two more project repos exist that this file had never covered, and both are
-now in the profile README's "Featured projects": **TravelPlanner** (a ranking
-system with a grounding check the LLM can't talk past — measured price-model
-MAE, a golden-set eval, `mypy --strict`) and **WayWin** (a shipped, actually-
-used points-betting PWA whose balance mutations all run as Postgres functions
-over RPC to close a real concurrency window). The profile said "four portfolio
-projects"; it was six.
+**TravelPlanner** — a ranking system with a grounding check the LLM can't talk
+past, a measured price-model MAE, a golden-set eval and `mypy --strict` — had
+never been covered by this file and is now in the profile README's "Featured
+projects", making five public projects there.
+
+Scope note: this file lives in a **public** repo, so it only ever discusses
+public repos. Private repos are tracked in their own repo's `CLAUDE.md`, not
+here — see the standing convention in this repo's `CLAUDE.md`.
 
 ### Doc-vs-code drift found this pass
 
@@ -306,25 +307,16 @@ the README keeps describing the design they replaced.**
 
 | Repo | What the docs still claimed | Reality |
 |---|---|---|
-| WayWin | Fixed x1–x5 multiplier, negotiated separately; a "group" layer above trips | Pool multiplier computed at resolution; the group layer was removed in migration 14 |
 | Twistify | Judge calibration in progress, retrieval "hasn't started" | Six judges tried and closed as unsolved; Milestone 1 complete at 20/20 titles |
 | TrackerAID | "F2 in progress", F3 not started | F2 done (91.3% deadline coverage), F3 pipeline/API/n8n running |
 | TrainFitter | Forwarded checklists not picked up by the adherence scan | Fixed — only the trainer's own sent copy is excluded now |
 | AuraPulse | "The Streamlit app isn't deployed anywhere yet" | Deployed and live; contradicted its own Status section |
 
-### Two real defects surfaced by writing the docs
+### A real defect surfaced by writing the docs
 
-Neither is a documentation problem — both are things that only became visible
-when the README's claims were checked against the tree.
+Not a documentation problem — something that only became visible when the
+README's claims were checked against the tree.
 
-- [ ] **WayWin: `schema.sql` is behind the live database.** The pool-multiplier
-      change touched only `index.html` and `sw.js`; the new
-      `apuestas.multiplicador_minimo` column and the updated `resolve_apuesta` /
-      `edit_resultado_apuesta` were applied straight to the live Supabase
-      project and never written back. A backend built today from `schema.sql`
-      would run the *old* fixed multiplier against a client writing a column
-      that doesn't exist — i.e. the documented setup path no longer reproduces
-      the deployed app. **Highest-priority item on this list.**
 - [ ] **TravelPlanner: the devcontainer can't build.** `.devcontainer/`
       pins `python:1-3.11-bookworm` while `pyproject.toml` declares
       `requires-python = ">=3.12"` (matching CI, ruff and mypy), so the
@@ -341,12 +333,12 @@ also spell out what MIT does *not* cover: the Yelp dataset's own terms, the
 Booking.com fixture, BDNS public-sector reuse conditions, and the health-data
 obligations that come with running TrainFitter on real clients.
 
-- [ ] **Twistify and WayWin still have no `LICENSE` file.** Both READMEs now
-      state copyright is reserved by default, which is accurate and better
-      than silence — but picking a licence is still an open decision, and
-      "all rights reserved" on a portfolio repo discourages exactly the
-      reading-and-learning it exists to invite. **Still open** (Twistify's
-      LICENSE item has been open since the first pass).
+- [ ] **Twistify still has no `LICENSE` file.** Its README now states
+      copyright is reserved by default, which is accurate and better than
+      silence — but picking a licence is still an open decision, and "all
+      rights reserved" on a portfolio repo discourages exactly the
+      reading-and-learning it exists to invite. **Still open since the first
+      pass.**
 - [ ] **The `LICENSE` copyright holder is inconsistent** across the four repos
       that have one: `serpeigd`, `Sergio`, `Sergio Peigneux d'Egmont`, and
       `Sergio (@serpeigd)`. Harmless legally, sloppy on a portfolio. Left

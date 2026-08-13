@@ -15,6 +15,16 @@ each pass.
 - Keep the featured-projects section honest and current: pull status/stack directly
   from each project repo's own README/CLAUDE.md rather than guessing or letting a
   description go stale after a project repo changes.
+- **This repo is public — only public repos belong in it (added 2026-08-13, explicit
+  decision in chat).** `README.md` renders on the profile page and
+  `PROFILE_IMPROVEMENTS.md` is publicly readable too, so *neither* file may name,
+  describe, or link a private repo. Before adding a project to either file, check
+  it's actually public. Track private repos in their own repo's `CLAUDE.md` instead.
+  - **`WayWin` is private and stays out of both files.** The 2026-08-13 doc-sync run
+    added it to Featured projects; the project owner removed it and asked that it
+    stay out while keeping WayWin's own README maintained. Don't re-add it on a
+    later pass just because the repo is in scope for the sync task — being synced
+    and being featured are separate things.
 
 ## Scheduled documentation-sync runs (added 2026-08-07, explicit decision in chat)
 
