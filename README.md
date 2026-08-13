@@ -32,9 +32,18 @@ measure a claim instead of assuming it.
 ![Ollama](https://img.shields.io/badge/Ollama-000000?logo=ollama&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
 
+**Data stores & orchestration (personal projects)**
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-EA4B71?logo=n8n&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-1C3C3C?logo=langchain&logoColor=white)
+
 **Tooling**
 ![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=githubactions&logoColor=white)
+![Ruff](https://img.shields.io/badge/Ruff-D7FF64?logo=ruff&logoColor=black)
+![mypy](https://img.shields.io/badge/mypy-2A6DB2?logo=python&logoColor=white)
 
 ---
 
@@ -42,17 +51,19 @@ measure a claim instead of assuming it.
 
 - **[TrainFitter](https://github.com/serpeigd/TrainFitter)**,
   **[Twistify](https://github.com/serpeigd/Twistify)**,
-  **[AuraPulse](https://github.com/serpeigd/AuraPulse)**, and
-  **[TrackerAID](https://github.com/serpeigd/TrackerAID)** — four portfolio
-  projects moving phase by phase rather than shipped-and-done, each covering
-  a deliberately different slice of the agent-engineering roadmap: a
-  multi-agent pipeline with a human-approval gate (TrainFitter), a
-  measured-not-promised safety guarantee with a calibrated eval harness
+  **[AuraPulse](https://github.com/serpeigd/AuraPulse)**,
+  **[TrackerAID](https://github.com/serpeigd/TrackerAID)**, and
+  **[TravelPlanner](https://github.com/serpeigd/TravelPlanner)** — five
+  portfolio projects moving phase by phase rather than shipped-and-done,
+  each covering a deliberately different slice of the agent-engineering
+  roadmap: a multi-agent pipeline with a human-approval gate (TrainFitter),
+  a measured-not-promised safety guarantee with a calibrated eval harness
   (Twistify), conditional routing / when a graph orchestrator earns its
-  complexity over a plain sequential pipeline (AuraPulse), and a retrieval
-  system with a proper IR-eval discipline plus real orchestration tooling
-  (n8n, Lovable) — the data-engineering/production-retrieval slice the other
-  three don't cover (TrackerAID).
+  complexity over a plain sequential pipeline (AuraPulse), a retrieval
+  system with proper IR-eval discipline plus real orchestration tooling —
+  n8n, Supabase, a local LLM (TrackerAID), and a ranking system where the
+  LLM is explicitly a component rather than the system, held to a grounding
+  check it cannot talk its way past (TravelPlanner).
 - Deepening a specific set of AI-engineering topics, in this order of
   priority right now:
   - **Agent architecture** — typed tool contracts, explicit state, bounded
@@ -92,9 +103,11 @@ GitHub Actions cron trigger, pytest, CI.
 (one narrow, disclosed exception for the portal's own magic link) — every
 plan is a draft, and clinical or injury cases are auto-flagged for human
 review by a validator that's deliberately never the LLM path.
-*Recent improvement:* a client roster with per-client weight/adherence trend
-charts, surfaced by a real production crash (a missing chart-library
-dependency) that live-testing caught and the test suite hadn't.
+*Recent improvement:* clients can now favourite a meal or an exercise from
+their own portal and have it *bias* — never pin — what gets generated next
+week, dropped silently the moment a new injury or allergy makes it unsafe.
+Verified statistically against the live workspace rather than eyeballed: a
+liked exercise reappeared in ~74% of 30 regenerations.
 *Try it:* [trainfitter.streamlit.app](https://trainfitter.streamlit.app/) — no install, no login, no API key.
 
 **[Twistify](https://github.com/serpeigd/Twistify)**
@@ -110,14 +123,16 @@ frontend, two interchangeable baseline generators (Anthropic paid / Groq
 free tier), a custom evals harness (leakage rate, grounded-fact rate,
 richness) calibrated against a 7,657-review external human dataset, pytest,
 CI.
-*Notable design choice:* the harness reports its own judge's weaknesses
-(a measured `recall = 0.089` on the best judge so far) instead of hiding
-them, and blocks the next milestone (retrieval) until the judge clears a
-trust bar.
-*Recent improvement:* a research-assist tool that drafts new catalogue
-entries from real Wikipedia/TMDB retrieval (never LLM memory), with a
-code-level safety net that strips any fabricated citation — confirmed
-working end-to-end live, best-of-3 candidate generation included.
+*Notable design choice:* six different spoiler judges were built and
+measured; none proved trustworthy enough to report a leakage rate, and the
+project says so rather than shipping the flattering number. The default
+judge stays the one with a *known* `recall = 0.0` — because missing things
+is a bounded failure, and confidently flagging non-leaks isn't.
+*Recent improvement:* Milestone 1 (Wikipedia retrieval restricted to a
+GREEN-tier corpus that never even constructs the plot section as a source)
+took grounded-fact rate from 0.0 to 1.0 across all 20 titles — and hand-
+reading every one of them found three real leaks no judge had caught, via
+two distinct mechanisms. Both results are published, not just the good one.
 *Try it:* [twistify.onrender.com](https://twistify.onrender.com) — 8/20 titles fully researched with cited sources, the rest browsable via TMDB.
 
 **[AuraPulse](https://github.com/serpeigd/AuraPulse)**
@@ -135,14 +150,16 @@ deterministic fake-review generator validates the pipeline first, and the
 free Yelp star rating backs sentiment evals before a single review gets
 hand-labeled for aspect extraction.
 *Status:* Hito 0 (classification → aggregation → reporting) done and
-evaluated end-to-end; Hito 1's first slice has since shipped too —
-LLM-free routing, draft-reply generation, and deterministic escalation
-flagging, still with no orchestration framework until the `if/elif`
-routing genuinely stops being legible.
-*Recent improvement:* the escalation trigger (`severity_flag`) went from
-25% specificity to a measured 100%/100% recall-and-specificity, via a
-properly balanced ground-truth set instead of a token 1-positive-case
-sample.
+evaluated end-to-end; Hito 1 shipped too — LLM-free routing, draft-reply
+generation, deterministic escalation flagging, and a Streamlit demo
+deployed publicly.
+*Recent improvement:* the project's central question finally got a
+concrete answer, and it came out **both ways in the same codebase**.
+Routing between three known outcomes stays a plain `if/elif` — a framework
+would buy nothing there. But the draft reject/regenerate loop has to pause
+indefinitely between clicks and survive the reviewer closing the browser,
+which a Python loop can't do: that one earned LangGraph, and nothing else
+in the project did.
 
 **[TrackerAID](https://github.com/serpeigd/TrackerAID)**
 A weekly semantic radar for Spanish public-grant announcements (BDNS, the
@@ -164,10 +181,47 @@ bar AuraPulse holds its sentiment/aspect claims to — never asserted without
 a labeled denominator; the eval script explicitly flags when it's still
 running on provisional heuristic labels instead of a human-reviewed gold
 set.
-*Status:* F0 (verified BDNS-only data source, see ADR-0002) done; F1 (field
-coverage measured, gold-labeling criteria written, BM25 baseline + eval
-harness running) in progress — 450 gold candidates generated, 0 yet
-hand-reviewed.
+*Status:* F0–F2 done, F3 in progress. The gold set is complete (443 of 450
+pairs hand-confirmed) and the BM25 baseline has real numbers against it —
+`MRR = 1.00`, `precision@20 = 0.95`, but `recall@20 = 0.153`, which is
+stated as the weak number to beat rather than buried under the two good
+ones. Deadline extraction (F2) resolves 91.3% of announcements through a
+three-tier cascade — structured field, then regex, then a **local** LLM via
+Ollama — at zero API cost, and leaves the remaining 8.7% explicitly
+unresolved instead of guessing. F3 has the ingestion pipeline, a FastAPI
+service and the n8n cron scaffold running.
+
+**[TravelPlanner](https://github.com/serpeigd/TravelPlanner)**
+A trip-recommendation system built to be defended rather than demoed: it
+ranks real accommodation and activity candidates with an explainable score,
+enforces hard constraints in deterministic code, and only then lets an LLM
+describe the result.
+*Problem it solves:* recommendation demos are easy to make impressive and
+hard to justify — this one is built so every number in the output can be
+traced to a rule, a model coefficient, or a retrieved fact.
+*Stack:* Python 3.12, FastAPI, a hedonic price model (scikit-learn), a
+reproducible evaluation harness, Streamlit, `mypy --strict`, ruff, pytest
+in CI.
+*Notable design choice:* the explanation step is **structurally unable to
+invent a fact** — a grounding check verifies every figure in the generated
+text against the retrieved data, and the one class of error it still can't
+catch (claim-level misattribution) is documented as a known blind spot
+rather than left for a reader to discover.
+*Measured, not asserted:* price-model MAE €40.85 against €73.32 for the
+best baseline (a 44% cut), 11/11 golden-set scenarios passing, 100% budget
+compliance, zero hard-constraint violations.
+
+**[WayWin](https://github.com/serpeigd/WayWin)**
+A points-betting app (no real money) for a fixed group of friends on a
+trip — the deliberately un-serious one, shipped and actually used.
+*Why it's here anyway:* the interesting part is concurrency. Everything
+that moves a balance runs as a Postgres function called over RPC, not as a
+read-modify-write from the client, because several phones bidding against
+the same balance at once is a real race window rather than a theoretical
+one. Payouts use a pool-style multiplier computed at resolution time.
+*Stack:* a single no-build HTML file (React via CDN), Supabase
+(Postgres + Realtime + Storage) with row-level security, installable as a
+PWA with an offline shell, deployed on Render.
 
 ---
 
