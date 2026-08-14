@@ -12,6 +12,12 @@ each pass.
   the user stays in Spanish.
 - No CI is configured here (it's a static README + a notes file, nothing to test) —
   don't add one speculatively.
+- **Keep it short (2026-08-13, explicit request in chat).** Too much text, too much
+  explaining. Lead with the answer or the change; give reasoning only where it would
+  change a decision. Don't recap work already visible in the diff, don't restate the
+  question before answering it, and don't close with a summing-up line. Applies to
+  chat, commit messages and PR bodies. Reference docs (README, this file) can be
+  longer, but only where the length earns it.
 - Keep the featured-projects section honest and current: pull status/stack directly
   from each project repo's own README/CLAUDE.md rather than guessing or letting a
   description go stale after a project repo changes.
