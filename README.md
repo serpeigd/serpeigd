@@ -89,7 +89,7 @@ measure a claim instead of assuming it.
 A multi-agent system that drafts workout and nutrition plans for a personal
 trainer's clients, following the trainer's own documented method instead of
 generic advice — now with a live demo, Gmail/Notion integrations, a
-client-facing portal, and a trainer-facing client roster, not just a
+client-facing portal, and a fleet-level client dashboard, not just a
 pipeline.
 *Problem it solves:* the bottleneck in online coaching isn't coaching — it's
 the hours spent writing a routine and a diet from scratch per client, then
