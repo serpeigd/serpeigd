@@ -351,3 +351,39 @@ obligations that come with running TrainFitter on real clients.
       valid content was folded into this pass's PR and updated; it was not
       closed automatically because TrackerAID, unlike the other repos, has no
       `CLAUDE.md` granting standing authorization to merge or close doc PRs.
+
+## Update (2026-08-16 doc-sync pass)
+
+Verified all 5 public repos (AuraPulse, TrainFitter, Twistify, TrackerAID,
+TravelPlanner) against their current READMEs/CLAUDE.md. Twistify and
+TravelPlanner needed no changes — already accurate. One stale claim found
+and fixed in this repo's own `README.md`: TrainFitter's card still said
+"a trainer-facing client roster," but that per-client roster table was
+removed in favor of an anonymized fleet-level dashboard (per TrainFitter's
+own `CLAUDE.md` — "'Clients' is now the dashboard *only*... the per-client
+roster table... is gone"). Fixed to "a fleet-level client dashboard."
+
+Three real, out-of-scope-to-fix-here gaps surfaced while verifying:
+
+- [ ] **TrackerAID has no ADR for its F3 decisions.** `docs/adr/` has only
+      0001–0004 (architecture-decision-records convention, single-source
+      BDNS, logic-in-Python-not-n8n, free deadline extraction), but F3
+      (Supabase ingestion pipeline, FastAPI API, n8n scaffold) is
+      substantially built with no ADR documenting those choices — a real
+      gap against the repo's own stated convention of ADR-ing every
+      architectural call.
+- [ ] **TrackerAID's `sql/001_init_schema.sql` has a stale comment.** Line 1
+      says "Se aplicará vía Supabase (migraciones) en F4," but F3 already
+      applies this schema via Supabase (`pipeline.py`/`storage.py` per the
+      current README) — the comment describes a design that shipped a
+      phase earlier than it says.
+- [ ] **AuraPulse's GitHub repo description metadata is stale**, confirmed
+      live via the GitHub API: "Detects recurring operational
+      inconsistencies in restaurant reviews and turns them into actionable
+      product-improvement signal. Zero-cost, local-LLM pipeline (portfolio
+      project, Hito 0 in progress)." Hito 0 is done and Hito 1 has shipped
+      substantial work (routing, draft-reply generation, escalation
+      flagging, a LangGraph reject/regenerate loop, a live Streamlit demo)
+      per the repo's own README. Not a file this doc-sync task can edit —
+      flagged here for Sergio to update by hand in the repo's GitHub
+      settings.
