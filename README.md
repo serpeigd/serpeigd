@@ -35,9 +35,11 @@ measure a claim instead of assuming it.
 **Data stores & orchestration (personal projects)**
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase&logoColor=white)
+![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?logo=duckdb&logoColor=black)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 ![n8n](https://img.shields.io/badge/n8n-EA4B71?logo=n8n&logoColor=white)
 ![LangGraph](https://img.shields.io/badge/LangGraph-1C3C3C?logo=langchain&logoColor=white)
+![MLflow](https://img.shields.io/badge/MLflow-0194E2?logo=mlflow&logoColor=white)
 
 **Tooling**
 ![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
@@ -52,18 +54,21 @@ measure a claim instead of assuming it.
 - **[TrainFitter](https://github.com/serpeigd/TrainFitter)**,
   **[Twistify](https://github.com/serpeigd/Twistify)**,
   **[AuraPulse](https://github.com/serpeigd/AuraPulse)**,
-  **[TrackerAID](https://github.com/serpeigd/TrackerAID)**, and
-  **[TravelPlanner](https://github.com/serpeigd/TravelPlanner)** — five
+  **[TrackerAID](https://github.com/serpeigd/TrackerAID)**,
+  **[TravelPlanner](https://github.com/serpeigd/TravelPlanner)**, and
+  **[FlightsDelay](https://github.com/serpeigd/FlightsDelay)** — six
   portfolio projects moving phase by phase rather than shipped-and-done,
-  each covering a deliberately different slice of the agent-engineering
-  roadmap: a multi-agent pipeline with a human-approval gate (TrainFitter),
-  a measured-not-promised safety guarantee with a calibrated eval harness
+  each covering a deliberately different slice of the roadmap: a
+  multi-agent pipeline with a human-approval gate (TrainFitter), a
+  measured-not-promised safety guarantee with a calibrated eval harness
   (Twistify), conditional routing / when a graph orchestrator earns its
   complexity over a plain sequential pipeline (AuraPulse), a retrieval
   system with proper IR-eval discipline plus real orchestration tooling —
-  n8n, Supabase, a local LLM (TrackerAID), and a ranking system where the
-  LLM is explicitly a component rather than the system, held to a grounding
-  check it cannot talk its way past (TravelPlanner).
+  n8n, Supabase, a local LLM (TrackerAID), a ranking system where the LLM
+  is explicitly a component rather than the system, held to a grounding
+  check it cannot talk its way past (TravelPlanner), and a classical
+  ML/data-engineering piece — a 13.9M-row leakage contract, DuckDB vs.
+  Spark benchmarked rather than assumed (FlightsDelay).
 - Deepening a specific set of AI-engineering topics, in this order of
   priority right now:
   - **Agent architecture** — typed tool contracts, explicit state, bounded
@@ -210,6 +215,27 @@ rather than left for a reader to discover.
 *Measured, not asserted:* price-model MAE €40.85 against €73.32 for the
 best baseline (a 44% cut), 11/11 golden-set scenarios passing, 100% budget
 compliance, zero hard-constraint violations.
+
+**[FlightsDelay](https://github.com/serpeigd/FlightsDelay)**
+Predicts whether a US domestic flight arrives 15+ minutes late over 13.9M
+BTS flights (2023-2024), built around a single question: does the model
+know something it wouldn't know yet at the moment a passenger actually asks?
+*Problem it solves:* a leakage bug is the easiest way to make a delay model
+look great and be useless — most of the obviously predictive columns in the
+source feed are recorded *after* the outcome they're predicting.
+*Stack:* Python 3.12, an explicit leakage contract (every column tagged with
+when its value becomes known, features assembled by filtering on that
+instead of hand-picked lists), DuckDB and Spark benchmarked head-to-head,
+Delta Lake, MLflow, Streamlit, pytest/ruff/`mypy --strict` in CI.
+*Notable design choice:* the same label, data, models and split, run twice —
+once with an inference-time cutoff and once without — turn a single PR-AUC
+number into a measured leakage gap (0.343 vs. 0.938) instead of one
+optimistic score.
+*Measured, not asserted:* DuckDB beats Spark at every scale tested on this
+workload (13.8x-2.5x depending on operation, narrowing but never crossing
+as data grows 24x) — a documented, benchmarked case *against* reaching for
+the bigger engine by default.
+*Try it:* [flightsdelay-demo.streamlit.app](https://flightsdelay-demo.streamlit.app/).
 
 ---
 
