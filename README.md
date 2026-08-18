@@ -239,28 +239,6 @@ the bigger engine by default.
 
 ---
 
-#### Background
-
-Bachelor in Data Science, University of Valencia. 3+ years of professional
-experience:
-
-- **IVIRMA Global** — ML demand forecasting in Python, NLP/sentiment
-  analysis on unstructured text, end-to-end ETL and ML pipelines with SQL,
-  PySpark, and Azure Databricks; model evaluation, A/B testing, and
-  hyperparameter tuning with Azure ML; Power BI/Tableau dashboards for
-  stakeholder reporting.
-- **SDG Group** — ETL workflow development and datamart design/validation
-  for a banking client, using SQL and PowerCenter.
-- **University of Valencia (NLP project)** — NLP-based data anonymization
-  and text-preprocessing pipelines, with automated ETL and data-governance
-  workflows for privacy-sensitive data.
-
-Comfortable across the full loop of a data problem — from analysis and
-modeling to shipping a result as a service — with the AI-agent work above
-as the current, self-directed focus.
-
----
-
 #### Contact
 
 - GitHub: you're already here — [@serpeigd](https://github.com/serpeigd)
