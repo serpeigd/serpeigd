@@ -455,8 +455,8 @@ confirmed public via the GitHub API and added to the profile README's
 "Currently working on" and "Featured projects" sections, plus two new
 `Data stores & orchestration` badges (DuckDB, MLflow) for a genuinely new
 tech surface. Repo visibility re-verified for all 8 repos in scope via the
-API rather than assumed from memory — **WayWin stays confirmed private**
-and correctly absent from every public file here.
+API rather than assumed from memory — the one private repo in scope stays
+confirmed private and correctly absent from every public file here.
 
 Per-repo sync results: AuraPulse and TrainFitter needed no doc changes
 (re-verified against their working trees). Twistify
@@ -476,16 +476,13 @@ leak flagged 2026-08-17 is **still present**, and a new small one found —
 actually holds 11 (matches the README's correct "11/11," only the source
 docstring undercounts).
 
-WayWin (private, no PR merge authorization documented in its `CLAUDE.md`):
-found and folded two competing "docs: sync" PRs into one
-([#5](https://github.com/serpeigd/WayWin/pull/5), left open as draft) —
-the older PR (#4) had already independently renamed "viaje"→"plan"
-throughout and documented number-based bets, reactions, reopening, activity
-history and admin bulk-points that this pass's own first draft had missed;
-verified both against the code and merged the accurate parts of each rather
-than picking one blind. FlightsDelay: a PR (#1) already existed from an
-earlier attempt this same pass — left open as draft (no merge authorization
-there either).
+The private repo in scope (no PR merge authorization documented in its own
+`CLAUDE.md`): found two competing "docs: sync" PRs and folded them into
+one, left open as draft — the older PR had independently caught real doc
+drift this pass's own first draft had missed; verified both against the
+code and merged the accurate parts of each rather than picking one blind.
+FlightsDelay: a PR (#1) already existed from an earlier attempt this same
+pass — left open as draft (no merge authorization there either).
 
 **New instance of the session-ID leak, caught and fixed in place**: two PR
 bodies opened *during this same pass* — Twistify #15 (already merged into
@@ -497,3 +494,64 @@ plain `https://claude.ai/code` footer. This is the second time this leak
 class has recurred after being "fixed" — worth Sergio's attention as a
 process gap (the rule lives in every repo's `CLAUDE.md`, but a background
 sync agent still produced it twice more), not just a one-off correction.
+
+## Update (2026-08-23 doc-sync pass)
+
+Every repo in scope reviewed in parallel, ground-truthed against its own
+working tree rather than its changelog. AuraPulse
+([#30](https://github.com/serpeigd/AuraPulse/pull/30), merged): README and
+`docs/DESIGN.md` were already accurate; `CLAUDE.md` had two stale spots —
+the aspect-schema decision presented as still open when it was resolved
+weeks ago, and a "Hito 0 only" framing when Hito 1's first slice had
+already shipped — both fixed with pointers to `docs/DESIGN.md`, history
+kept rather than rewritten. TrainFitter
+([#10](https://github.com/serpeigd/TrainFitter/pull/10), merged): README's
+"can't be un-liked from the portal" limitation was stale (both meal
+like/dislike are undoable now; exercise-liking has no portal write path at
+all anymore), and `CLAUDE.md`'s short architecture diagram still said a
+flagged plan has "no auto-send (unchanged)" when it now sends directly on
+approval — this profile's own TrainFitter card had the same stale claim,
+fixed below. A real code defect was found and flagged, not fixed:
+`mcp/gmail_client.py`'s own docstring still claims a flagged plan "always
+goes through `crear_borrador()` instead, no matter what," which is no
+longer true. Twistify
+([#16](https://github.com/serpeigd/Twistify/pull/16), **left open** —
+CI is genuinely broken on every push since 2026-08-19, two test files
+import `fastapi`/`groq`/`httpx` unconditionally and the workflow never
+installs them, confirmed pre-existing and unrelated to this doc-only diff):
+the researched-title count was stale by a wide margin — README said 8/20,
+the actual catalogue has grown to 23 (18 of the 20-title measurement set
+plus 5 beyond it) — fixed here and in that repo's own README/PR. Also
+surfaced and disclosed for the first time: the "+ Suggest a movie" flow now
+auto-publishes with no human or AI review step, a real, deliberate
+exception to the review-gate guarantee the README had implied applied
+everywhere. TrackerAID: no changes — README/`CLAUDE.md` re-verified against
+a live local `pytest` (51 passed) and `scripts/run_eval.py` run that
+reproduced the exact documented IR numbers (precision@20, recall@20, MRR).
+TravelPlanner ([#4](https://github.com/serpeigd/TravelPlanner/pull/4),
+merged): only real drift was the test count, resolved for real this time —
+a full local run gives 248 passed (not 245), `mypy --strict` and `ruff`
+both clean, every headline number in the README reproduced live. The
+`zz_HOWTOLOCAL.txt` local-path leak flagged 2026-08-17 is **still
+present** — still not this task's to fix, still worth Sergio's attention.
+FlightsDelay ([#2](https://github.com/serpeigd/FlightsDelay/pull/2), left
+open — no merge authorization documented in this repo at all): two stale
+figures fixed (a recurrence of a number already fixed once before in
+`docs/conclusions.md`; a "tripled" claim recalculated against the committed
+calibration artifact to "more than doubled"). A real drift was found and
+flagged, not fixed: `docs/modelling.md`'s threshold/decision-curve table no
+longer matches the `analysis.json` artifact the live dashboard actually
+reads — looks like the doc and the currently-shipped artifact came from two
+different `analyse` runs; left both untouched rather than guessing which is
+current. The private repo in scope (left open, no merge authorization):
+five real doc fixes plus one real code gap flagged — its CI workflow's
+push-trigger path filter references a directory that doesn't exist in the
+repo, so the automatic post-push run never actually fires, only the manual
+one does.
+
+Profile README updated in two places past-sync had missed: TrainFitter's
+"nothing is ever sent to a client automatically" claim (now false — see
+above) replaced with an accurate description of both real send-reversals;
+Twistify's "8/20 titles" corrected to 23. See the CLAUDE.md update
+alongside this entry for a private-repo-naming leak found and fixed in this
+file's own 2026-08-18 entry above.

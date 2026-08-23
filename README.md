@@ -104,15 +104,15 @@ tracking whether the client actually follows it.
 explicit-state orchestration across routine/diet/validator agents, a
 Streamlit review panel and client portal, Gmail/Notion connectors, a
 GitHub Actions cron trigger, pytest, CI.
-*Notable design choice:* nothing is ever sent to a client automatically
-(one narrow, disclosed exception for the portal's own magic link) — every
-plan is a draft, and clinical or injury cases are auto-flagged for human
-review by a validator that's deliberately never the LLM path.
-*Recent improvement:* clients can now favourite a meal or an exercise from
-their own portal and have it *bias* — never pin — what gets generated next
-week, dropped silently the moment a new injury or allergy makes it unsafe.
-Verified statistically against the live workspace rather than eyeballed: a
-liked exercise reappeared in ~74% of 30 regenerations.
+*Notable design choice:* a validated plan (`aprobado_automatico`) now sends
+itself — a deliberate, later reversal of the project's original always-draft
+rule — while a plan the validator flags still requires the trainer's own
+review and approve click before anything goes out; the safety validator
+that decides which path a plan takes is deliberately never the LLM.
+*Recent improvement:* a second reversal of "never sends automatically,"
+scoped and confirmed with the project owner before being built — approving
+a flagged plan now sends it directly instead of only creating a Gmail draft
+first, with the manual draft path kept as an explicit fallback.
 *Try it:* [trainfitter.streamlit.app](https://trainfitter.streamlit.app/) — no install, no login, no API key.
 
 **[Twistify](https://github.com/serpeigd/Twistify)**
@@ -138,7 +138,7 @@ GREEN-tier corpus that never even constructs the plot section as a source)
 took grounded-fact rate from 0.0 to 1.0 across all 20 titles — and hand-
 reading every one of them found three real leaks no judge had caught, via
 two distinct mechanisms. Both results are published, not just the good one.
-*Try it:* [twistify.onrender.com](https://twistify.onrender.com) — 8/20 titles fully researched with cited sources, the rest browsable via TMDB.
+*Try it:* [twistify.onrender.com](https://twistify.onrender.com) — 23 titles fully researched with cited sources, the rest browsable via TMDB.
 
 **[AuraPulse](https://github.com/serpeigd/AuraPulse)**
 An agent that reads a restaurant's public reviews and detects recurring
