@@ -32,6 +32,15 @@ each pass.
     a private repo to Featured projects, the project owner removed it and asked that
     it stay out, and the same run then leaked it twice more — into
     `PROFILE_IMPROVEMENTS.md`, and again into this file while writing up the lesson.
+  - **Recurred again 2026-08-23, in a different spot**: the 2026-08-18 pass's own
+    process notes in `PROFILE_IMPROVEMENTS.md` named the private repo, linked its
+    PR, and described its app features (bet types, reactions, admin actions) while
+    writing up how that sync run went — not Featured Projects this time, but the
+    rule covers the whole file, not just that section. Caught and redacted
+    2026-08-23 (repo referred to only as "the private repo in scope," no name/link/
+    feature detail). The rule isn't just "don't feature it" — it's "don't write
+    anything identifying about it here at all," including in a retrospective note
+    about the sync process itself.
   - **Being in scope for the sync task and being featured here are separate things.**
     A private repo's own README still gets maintained by the recurring run. That is
     not a reason to surface it on the profile. Each excluded repo says so in its own
