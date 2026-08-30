@@ -555,3 +555,50 @@ above) replaced with an accurate description of both real send-reversals;
 Twistify's "8/20 titles" corrected to 23. See the CLAUDE.md update
 alongside this entry for a private-repo-naming leak found and fixed in this
 file's own 2026-08-18 entry above.
+
+## Update (2026-08-30 doc-sync pass)
+
+Every repo in scope reviewed in parallel again, each ground-truthed against
+its own working tree. AuraPulse: no README/`docs/DESIGN.md` changes needed
+(re-verified live — 117 tests, ruff, mypy all clean) but this profile's own
+AuraPulse card was stale, fixed below. TrainFitter
+([#11](https://github.com/serpeigd/TrainFitter/pull/11), merged): four real
+drifts fixed (a shipped shopping-list feature missing from the README, a
+dashboard chart count off by one, a stale architecture diagram/panel bullet
+still describing the pre-`enviar_plan()` draft-only flow, a stale Gmail OAuth
+scope). Twistify ([#17](https://github.com/serpeigd/Twistify/pull/17), left
+open — CI is still broken, unrelated to this diff, same root cause as
+2026-08-23): researched-catalogue count corrected again (README still said
+8, code has grown to 23 — matches what this profile already said, so no
+profile change needed there this time); newly disclosed that "+ Suggest a
+movie" now auto-publishes with no review step, a real reversal of the
+review-gate guarantee. Folded and closed the still-open PR #16 from a prior
+pass into #17. TrackerAID: no changes, re-verified against
+`docs/f1-eval-results.md`/`docs/f2-deadline-coverage.md` directly — every
+number this profile already cites still matches. TravelPlanner
+([#5](https://github.com/serpeigd/TravelPlanner/pull/5)): no README/decision
+drift found; instead of only re-flagging the `zz_HOWTOLOCAL.txt` local-path
+leak in a sync summary a fourth time, it's now named directly in that
+repo's own README §14 and `CLAUDE.md` — still not this task's file to
+delete, but no longer only visible here. FlightsDelay
+([#3](https://github.com/serpeigd/FlightsDelay/pull/3), left open — still no
+merge authorization in this repo): three stale figures fixed (a lift number,
+a calibration-gap description, a whole decision-threshold table recomputed
+from the artifact the dashboard actually reads, verified live by calling the
+repo's own `cost_sensitivity()`/`best_threshold()`). Folded and closed PR #2
+into #3. A real defect was found and reverted rather than committed:
+`uv.lock` was out of sync with `pyproject.toml` (missing `statsmodels`, a
+stale `streamlit` floor) — flagged in the PR body, needs `uv lock` run for
+real. The private repo in scope (no merge authorization documented in its
+own `CLAUDE.md`): real drift fixed (a 10-minute no-penalty bet-editing
+window, a one-raise-only limit, and a self-resolution restriction, all
+undocumented before), left open as a draft PR — its own agent also caught
+and fixed a session-ID leak in its PR body before it landed, the same leak
+class documented above.
+
+Profile README updated in one place this pass: AuraPulse's Status line
+claimed "Hito 1 shipped too" with routing/draft-reply/escalation all
+implied done — AuraPulse's own `CLAUDE.md` and a live re-verification both
+say Hito 1 is still in progress (escalation isn't built yet), so the claim
+was corrected to match, with the real Hito 0 eval numbers (43%/85%) added
+in place of the overstated claim.

@@ -155,9 +155,13 @@ deterministic fake-review generator validates the pipeline first, and the
 free Yelp star rating backs sentiment evals before a single review gets
 hand-labeled for aspect extraction.
 *Status:* Hito 0 (classification → aggregation → reporting) done and
-evaluated end-to-end; Hito 1 shipped too — LLM-free routing, draft-reply
-generation, deterministic escalation flagging, and a Streamlit demo
-deployed publicly.
+evaluated end-to-end — 43% aspect-set exact match, 85% sentiment agreement
+against the free Yelp-rating proxy. Hito 1 (conditional routing →
+human-reviewed draft replies → severity-based escalation) is in
+progress: routing and the human-in-the-loop draft-reply loop are in
+place, escalation is still ahead. Live demo on Streamlit Community Cloud
+via a frozen-replay snapshot, since the cloud deploy can't reach the
+local Ollama model.
 *Recent improvement:* the project's central question finally got a
 concrete answer, and it came out **both ways in the same codebase**.
 Routing between three known outcomes stays a plain `if/elif` — a framework
