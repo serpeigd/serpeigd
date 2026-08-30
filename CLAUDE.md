@@ -46,6 +46,20 @@ each pass.
     not a reason to surface it on the profile. Each excluded repo says so in its own
     `CLAUDE.md`, so read those before deciding what belongs on the profile.
 
+## Run-summary format for the scheduled cross-repo sync (added 2026-08-30, explicit request in chat)
+
+The final summary of a cross-repo documentation-sync run — both the chat reply and
+the push notification sent when the run finishes — must be **short and visual, in
+Spanish**, readable at a glance. Not prose paragraphs (the previous default): a
+compact bullet list or mini-table, one line per repo with an emoji/word verdict
+(no changes / merged / open, needs you), then a short "needs your attention" list
+for anything urgent (a leaked secret/path, broken CI, a PR nobody can merge). Full
+detail already lives in each repo's own PR body and in this repo's
+`PROFILE_IMPROVEMENTS.md` — the run summary should point there, not repeat it.
+This is specifically about the *summary delivered to Sergio when the task runs*,
+not about this file's or the README's own writing style, which stays under the
+"keep it short" convention above (English, prose is fine there).
+
 ## Scheduled documentation-sync runs (added 2026-08-07, explicit decision in chat)
 
 Standing authorization to merge doc-only PRs from the recurring cross-repo
