@@ -109,10 +109,11 @@ itself — a deliberate, later reversal of the project's original always-draft
 rule — while a plan the validator flags still requires the trainer's own
 review and approve click before anything goes out; the safety validator
 that decides which path a plan takes is deliberately never the LLM.
-*Recent improvement:* a second reversal of "never sends automatically,"
-scoped and confirmed with the project owner before being built — approving
-a flagged plan now sends it directly instead of only creating a Gmail draft
-first, with the manual draft path kept as an explicit fallback.
+*Recent improvement:* the client portal was rebuilt around tab navigation
+(Home · Meals · Routine · Check-in · Progress) with a "today's plan" home
+view, a free monthly adherence digest, and a client-facing cuisine
+preference that nudges 1-2 days a week of meals toward a chosen cuisine —
+the food bank grew to 61 items to support it.
 *Try it:* [trainfitter.streamlit.app](https://trainfitter.streamlit.app/) — no install, no login, no API key.
 
 **[Twistify](https://github.com/serpeigd/Twistify)**
@@ -190,15 +191,16 @@ bar AuraPulse holds its sentiment/aspect claims to — never asserted without
 a labeled denominator; the eval script explicitly flags when it's still
 running on provisional heuristic labels instead of a human-reviewed gold
 set.
-*Status:* F0–F2 done, F3 in progress. The gold set is complete (443 of 450
-pairs hand-confirmed) and the BM25 baseline has real numbers against it —
-`MRR = 1.00`, `precision@20 = 0.95`, but `recall@20 = 0.153`, which is
-stated as the weak number to beat rather than buried under the two good
-ones. Deadline extraction (F2) resolves 91.3% of announcements through a
-three-tier cascade — structured field, then regex, then a **local** LLM via
-Ollama — at zero API cost, and leaves the remaining 8.7% explicitly
-unresolved instead of guessing. F3 has the ingestion pipeline, a FastAPI
-service and the n8n cron scaffold running.
+*Status:* F0–F2 done (gold set 443 of 450 pairs hand-confirmed; BM25
+baseline — `MRR = 1.00`, `precision@20 = 0.95`, `recall@20 = 0.153` stated
+as the weak number to beat, not buried under the two good ones; deadline
+extraction resolves 91.3% of announcements through a free three-tier
+cascade — structured field, then regex, then a **local** LLM via Ollama —
+leaving the rest explicitly unresolved). F3 (Supabase ingestion + FastAPI)
+is running but not closed — verified email delivery is still missing. F4
+(a Lovable frontend, built but unpublished), F6 (a 👍/👎 feedback loop that
+retrains ranking) and an MCP server exposing read-only grant search to
+agents are also built.
 
 **[TravelPlanner](https://github.com/serpeigd/TravelPlanner)**
 A trip-recommendation system built to be defended rather than demoed: it
